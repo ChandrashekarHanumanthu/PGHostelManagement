@@ -1,5 +1,5 @@
 # Use multi-stage build for better performance
-FROM maven:3.9.4-openjdk-17 AS builder
+FROM maven:3.9-openjdk-17 AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-slim
 
 # Install curl for health checks
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
