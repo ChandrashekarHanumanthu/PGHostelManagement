@@ -52,13 +52,13 @@ public class PaymentController {
     }
 
     @GetMapping("/tenants/{tenantId}/payments")
-    @PreAuthorize("hasRole('ADMIN') or #tenantId == authentication.principal.id")
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER') or #tenantId == authentication.principal.id")
     public ResponseEntity<List<PaymentDto>> getTenantPayments(@PathVariable Long tenantId) {
         return ResponseEntity.ok(paymentService.getByTenant(tenantId));
     }
 
     @PostMapping("/tenants/{tenantId}/payments/{paymentId}/submit")
-    @PreAuthorize("hasRole('ADMIN') or #tenantId == authentication.principal.id")
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER') or #tenantId == authentication.principal.id")
     public ResponseEntity<PaymentDto> submitTenantPayment(
             @PathVariable Long tenantId,
             @PathVariable Long paymentId,

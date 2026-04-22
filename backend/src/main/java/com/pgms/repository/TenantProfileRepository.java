@@ -23,6 +23,8 @@ public interface TenantProfileRepository extends JpaRepository<TenantProfile, Lo
     List<TenantProfile> findByHostelAndAllocatedRoomIn(Hostel hostel, Collection<com.pgms.entity.Room> rooms);
     
     List<TenantProfile> findByAllocatedRoom(com.pgms.entity.Room room);
+
+    List<TenantProfile> findByHostelAndAllocatedRoom(Hostel hostel, com.pgms.entity.Room room);
     
     Optional<TenantProfile> findByHostelAndUserId(Hostel hostel, Long userId);
     

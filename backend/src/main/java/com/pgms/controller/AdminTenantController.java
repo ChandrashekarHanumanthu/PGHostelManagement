@@ -218,15 +218,8 @@ public class AdminTenantController {
     ) {
         try {
             Hostel currentHostel = userContextService.getCurrentUserHostel();
-            TenantProfile tenant = tenantProfileRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Tenant not found"));
-
-            // CRITICAL: Verify tenant belongs to current user's hostel
-            if (!tenant.getHostel().getId().equals(currentHostel.getId())) {
-                Map<String, String> error = new HashMap<>();
-                error.put("error", "Access denied: Tenant does not belong to your hostel");
-                return ResponseEntity.status(403).body(error);
-            }
+            TenantProfile tenant = tenantProfileRepository.findByHostelAndId(currentHostel, id)
+                    .orElseThrow(() -> new RuntimeException("Tenant not found in your hostel"));
 
             if (!tenant.isActive()) {
                 Map<String, String> response = new HashMap<>();

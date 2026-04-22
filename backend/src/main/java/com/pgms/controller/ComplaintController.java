@@ -22,7 +22,7 @@ public class ComplaintController {
     }
 
     @PostMapping("/tenant/{tenantId}")
-    @PreAuthorize("hasRole('ADMIN') or #tenantId == authentication.principal.id")
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER') or #tenantId == authentication.principal.id")
     public ResponseEntity<ComplaintDto> createComplaint(@PathVariable Long tenantId,
                                                         @RequestBody ComplaintDto dto) {
         // In a real app, assert tenantId matches authenticated user
@@ -30,7 +30,7 @@ public class ComplaintController {
     }
 
     @GetMapping("/my/{tenantId}")
-    @PreAuthorize("hasRole('ADMIN') or #tenantId == authentication.principal.id")
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER') or #tenantId == authentication.principal.id")
     public ResponseEntity<List<ComplaintDto>> getMyComplaints(@PathVariable Long tenantId) {
         return ResponseEntity.ok(complaintService.getComplaintsForTenant(tenantId));
     }

@@ -7,6 +7,7 @@ import com.pgms.entity.TenantProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
@@ -25,5 +26,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByMonth(String month);
     
     List<Payment> findByHostelAndStatus(Hostel hostel, PaymentStatus status);
+
+    Optional<Payment> findByHostelAndId(Hostel hostel, Long id);
 }
 

@@ -5,9 +5,9 @@ import com.pgms.entity.Hostel;
 import com.pgms.entity.Room;
 import com.pgms.entity.RoomAvailabilityStatus;
 import com.pgms.entity.TenantProfile;
+import com.pgms.exception.ConflictException;
 import com.pgms.repository.RoomRepository;
 import com.pgms.repository.TenantProfileRepository;
-import com.pgms.service.UserContextService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +19,16 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final TenantProfileRepository tenantProfileRepository;
     private final UserContextService userContextService;
+    private final HostelScopedAccessService hostelScopedAccessService;
 
-    public RoomService(RoomRepository roomRepository, TenantProfileRepository tenantProfileRepository, UserContextService userContextService) {
+    public RoomService(RoomRepository roomRepository,
+                       TenantProfileRepository tenantProfileRepository,
+                       UserContextService userContextService,
+                       HostelScopedAccessService hostelScopedAccessService) {
         this.roomRepository = roomRepository;
         this.tenantProfileRepository = tenantProfileRepository;
         this.userContextService = userContextService;
+        this.hostelScopedAccessService = hostelScopedAccessService;
     }
 
     public List<RoomDto> getAllRooms() {
@@ -35,56 +40,55 @@ public class RoomService {
     }
 
     public RoomDto getRoom(Long id) {
-        Hostel currentHostel = userContextService.getCurrentUserHostel();
-        return roomRepository.findById(id)
-                .filter(room -> room.getHostel().getId().equals(currentHostel.getId()))
-                .map(this::toDto)
-                .orElseThrow(() -> new RuntimeException("Room not found in your hostel"));
+        return toDto(hostelScopedAccessService.getRoom(id));
     }
 
     public RoomDto createRoom(RoomDto dto) {
         Hostel currentHostel = userContextService.getCurrentUserHostel();
+        String roomNumber = dto.getRoomNumber() != null ? dto.getRoomNumber().trim() : "";
+
+        if (roomNumber.isEmpty()) {
+            throw new com.pgms.exception.BadRequestException("Room number is required");
+        }
+        if (roomRepository.existsByHostelAndRoomNumber(currentHostel, roomNumber)) {
+            throw new ConflictException("Room number already exists in your hostel");
+        }
+
         Room room = new Room();
-        room.setRoomNumber(dto.getRoomNumber());
+        room.setRoomNumber(roomNumber);
         room.setRoomType(dto.getRoomType());
         room.setCapacity(dto.getCapacity());
         room.setRentAmount(dto.getRentAmount());
         room.setAvailabilityStatus(dto.getAvailabilityStatus() != null ? dto.getAvailabilityStatus() : RoomAvailabilityStatus.AVAILABLE);
-        room.setHostel(currentHostel);  // ✅ Set hostel for data isolation
+        room.setHostel(currentHostel);
         Room saved = roomRepository.save(room);
         return toDto(saved);
     }
 
     public RoomDto updateRoom(Long id, RoomDto dto) {
-        Hostel currentHostel = userContextService.getCurrentUserHostel();
-        Room room = roomRepository.findById(id)
-                .filter(r -> r.getHostel().getId().equals(currentHostel.getId()))
-                .orElseThrow(() -> new RuntimeException("Room not found in your hostel"));
+        Room room = hostelScopedAccessService.getRoom(id);
         room.setRoomNumber(dto.getRoomNumber());
         room.setRoomType(dto.getRoomType());
         room.setCapacity(dto.getCapacity());
         room.setRentAmount(dto.getRentAmount());
         room.setAvailabilityStatus(dto.getAvailabilityStatus());
-        // hostel_id already set from existing room - don't change it
         Room saved = roomRepository.save(room);
         return toDto(saved);
     }
 
     public void deleteRoom(Long id) {
         Hostel currentHostel = userContextService.getCurrentUserHostel();
-        Room room = roomRepository.findById(id)
-                .filter(r -> r.getHostel().getId().equals(currentHostel.getId()))
-                .orElseThrow(() -> new RuntimeException("Room not found in your hostel"));
-        
-        // Check if any tenants are allocated to this room
-        List<TenantProfile> allocatedTenants = tenantProfileRepository.findByAllocatedRoom(room);
-        
+        Room room = hostelScopedAccessService.getRoom(id);
+
+        List<TenantProfile> allocatedTenants = tenantProfileRepository.findByHostelAndAllocatedRoom(currentHostel, room);
         if (!allocatedTenants.isEmpty()) {
-            throw new RuntimeException("Cannot delete room: " + allocatedTenants.size() + 
-                    " tenant(s) are allocated to this room. Please re-allocate or remove tenants first.");
+            throw new com.pgms.exception.BadRequestException(
+                    "Cannot delete room: " + allocatedTenants.size()
+                            + " tenant(s) are allocated to this room. Please re-allocate or remove tenants first."
+            );
         }
-        
-        roomRepository.deleteById(id);
+
+        roomRepository.delete(room);
     }
 
     public long countTotalRooms() {
@@ -108,4 +112,3 @@ public class RoomService {
                 .build();
     }
 }
-

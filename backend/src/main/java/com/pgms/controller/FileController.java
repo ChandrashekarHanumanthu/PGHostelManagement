@@ -1,5 +1,8 @@
 package com.pgms.controller;
 
+import com.pgms.exception.ForbiddenOperationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -15,8 +18,8 @@ import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/uploads")
-@CrossOrigin(origins = "http://localhost:3000")
 public class FileController {
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -26,31 +29,37 @@ public class FileController {
             @PathVariable String subDirectory,
             @PathVariable String filename) {
         try {
-            Path filePath = Paths.get(uploadDir, subDirectory, filename).normalize();
-            System.out.println("Attempting to load file from: " + filePath.toAbsolutePath());
+            Path uploadRoot = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Path filePath = uploadRoot.resolve(subDirectory).resolve(filename).normalize();
+
+            if (!filePath.startsWith(uploadRoot)) {
+                throw new ForbiddenOperationException("Invalid file path");
+            }
+
             Resource resource = new UrlResource(filePath.toUri());
-
-            if (resource.exists() && resource.isReadable()) {
-                // Determine content type
-                String contentType = "application/octet-stream";
-                try {
-                    contentType = Files.probeContentType(filePath);
-                } catch (IOException e) {
-                    // Default to octet-stream if content type can't be determined
-                }
-
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(contentType))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                        .body(resource);
-            } else {
-                System.out.println("File not found or not readable: " + filePath.toAbsolutePath());
+            if (!resource.exists() || !resource.isReadable()) {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
-            System.out.println("Error serving file: " + e.getMessage());
-            e.printStackTrace();
+
+            String contentType = resolveContentType(filePath);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (ForbiddenOperationException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            logger.warn("Failed to serve file {}/{}", subDirectory, filename, ex);
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    private String resolveContentType(Path filePath) {
+        try {
+            String contentType = Files.probeContentType(filePath);
+            return contentType != null ? contentType : "application/octet-stream";
+        } catch (IOException ignored) {
+            return "application/octet-stream";
         }
     }
 }

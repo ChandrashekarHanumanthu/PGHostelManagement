@@ -15,6 +15,8 @@ public interface RoomTypeConfigRepository extends JpaRepository<RoomTypeConfig, 
     List<RoomTypeConfig> findByHostelAndIsActiveTrue(Hostel hostel);
     
     Optional<RoomTypeConfig> findByHostelAndRoomTypeAndIsActiveTrue(Hostel hostel, RoomType roomType);
+
+    Optional<RoomTypeConfig> findByHostelAndId(Hostel hostel, Long id);
     
     List<RoomTypeConfig> findByHostelAndRoomType(Hostel hostel, RoomType roomType);
 }

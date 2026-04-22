@@ -26,10 +26,11 @@ public class HostelPaymentSettingsService {
     public Optional<HostelPaymentSettingsDto> get() {
         Hostel currentHostel = userContextService.getCurrentUserHostel();
         Optional<HostelPaymentSettings> opt = repository.findByHostel(currentHostel);
-        if (opt.isPresent()) return opt.map(this::toDto);
+        if (opt.isPresent()) {
+            return opt.map(this::toDto);
+        }
         return Optional.of(HostelPaymentSettingsDto.builder()
                 .paymentMode("UPI_ID")
-                .upiId("8500394181")
                 .build());
     }
 

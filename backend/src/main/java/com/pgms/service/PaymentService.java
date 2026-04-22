@@ -6,15 +6,16 @@ import com.pgms.entity.Payment;
 import com.pgms.entity.PaymentStatus;
 import com.pgms.entity.PaymentType;
 import com.pgms.entity.TenantProfile;
+import com.pgms.exception.BadRequestException;
 import com.pgms.repository.PaymentRepository;
 import com.pgms.repository.RoomTypeConfigRepository;
 import com.pgms.repository.TenantProfileRepository;
-import com.pgms.service.UserContextService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,58 +24,59 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TenantProfileRepository tenantProfileRepository;
     private final RoomTypeConfigRepository roomTypeConfigRepository;
-    private final UserContextService userContextService;
+    private final HostelScopedAccessService hostelScopedAccessService;
 
     public PaymentService(PaymentRepository paymentRepository,
                           TenantProfileRepository tenantProfileRepository,
                           RoomTypeConfigRepository roomTypeConfigRepository,
-                          UserContextService userContextService) {
+                          HostelScopedAccessService hostelScopedAccessService) {
         this.paymentRepository = paymentRepository;
         this.tenantProfileRepository = tenantProfileRepository;
         this.roomTypeConfigRepository = roomTypeConfigRepository;
-        this.userContextService = userContextService;
+        this.hostelScopedAccessService = hostelScopedAccessService;
     }
 
     public void generateForMonth(String month) {
-        Hostel currentHostel = userContextService.getCurrentUserHostel();  // ✅ Get current user's hostel
-        List<TenantProfile> activeTenants = tenantProfileRepository.findByHostelAndSignupCompletedTrueAndActiveTrue(currentHostel)  // ✅ Filter by hostel
+        Hostel currentHostel = hostelScopedAccessService.getCurrentHostel();
+        List<TenantProfile> activeTenants = tenantProfileRepository.findByHostelAndSignupCompletedTrueAndActiveTrue(currentHostel)
                 .stream()
                 .filter(TenantProfile::isActive)
-                .filter(t -> t.getAllocatedRoom() != null) // only allocated tenants
+                .filter(t -> t.getAllocatedRoom() != null)
                 .collect(Collectors.toList());
 
         YearMonth ym = YearMonth.parse(month);
-        for (TenantProfile tenant : activeTenants) {
-            boolean exists = paymentRepository.findByMonth(month).stream()
-                    .anyMatch(p -> p.getTenant().getId().equals(tenant.getId())
-                            && (p.getType() == null || p.getType() == PaymentType.RENT));
-            if (!exists) {
-                // Use join date (allocationDate) to determine payment due date
-                // Payment is due on the same day of month as join date
-                // allocationDate is mandatory, but keep fallback for safety
-                int joinDay = tenant.getAllocationDate() != null
-                        ? tenant.getAllocationDate().toLocalDate().getDayOfMonth()
-                        : 1; // Fallback (should not happen as allocationDate is mandatory)
-                // Handle months with fewer days (e.g., Feb 30 -> Feb 28/29)
-                int dueDay = Math.min(joinDay, ym.lengthOfMonth());
-                LocalDate dueDate = ym.atDay(dueDay);
+        Set<Long> tenantsWithRentForMonth = paymentRepository.findByHostelAndMonth(currentHostel, month)
+                .stream()
+                .filter(p -> p.getType() == null || p.getType() == PaymentType.RENT)
+                .map(p -> p.getTenant().getId())
+                .collect(Collectors.toSet());
 
-                Payment payment = Payment.builder()
-                        .tenant(tenant)
-                        .month(month)
-                        .amount(tenant.getAllocatedRoom().getRentAmount())
-                        .type(PaymentType.RENT)
-                        .dueDate(dueDate)
-                        .status(PaymentStatus.PENDING)
-                        .hostel(currentHostel)  // ✅ Set hostel for data isolation
-                        .build();
-                paymentRepository.save(payment);
+        for (TenantProfile tenant : activeTenants) {
+            if (tenantsWithRentForMonth.contains(tenant.getId())) {
+                continue;
             }
+
+            int joinDay = tenant.getAllocationDate() != null
+                    ? tenant.getAllocationDate().toLocalDate().getDayOfMonth()
+                    : 1;
+            int dueDay = Math.min(joinDay, ym.lengthOfMonth());
+            LocalDate dueDate = ym.atDay(dueDay);
+
+            Payment payment = Payment.builder()
+                    .tenant(tenant)
+                    .month(month)
+                    .amount(tenant.getAllocatedRoom().getRentAmount())
+                    .type(PaymentType.RENT)
+                    .dueDate(dueDate)
+                    .status(PaymentStatus.PENDING)
+                    .hostel(currentHostel)
+                    .build();
+            paymentRepository.save(payment);
         }
     }
 
     public List<PaymentDto> getAllPaymentsForMonth(String month) {
-        var currentHostel = userContextService.getCurrentUserHostel();
+        Hostel currentHostel = hostelScopedAccessService.getCurrentHostel();
         return paymentRepository.findByHostelAndMonth(currentHostel, month)
                 .stream()
                 .map(this::toDto)
@@ -82,7 +84,7 @@ public class PaymentService {
     }
 
     public List<PaymentDto> getByMonthAndStatus(String month, PaymentStatus status) {
-        Hostel currentHostel = userContextService.getCurrentUserHostel();
+        Hostel currentHostel = hostelScopedAccessService.getCurrentHostel();
         return paymentRepository.findByHostelAndMonthAndStatus(currentHostel, month, status)
                 .stream()
                 .map(this::toDto)
@@ -90,8 +92,7 @@ public class PaymentService {
     }
 
     public List<PaymentDto> getByTenant(Long tenantId) {
-        TenantProfile tenant = tenantProfileRepository.findById(tenantId)
-                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+        TenantProfile tenant = hostelScopedAccessService.getTenant(tenantId);
         ensureFirstMonthRentIfNeeded(tenant);
         return paymentRepository.findByTenant(tenant)
                 .stream()
@@ -105,17 +106,29 @@ public class PaymentService {
      * First month: rent + maintenance (one combined payment). Next months: rent only.
      */
     private void ensureFirstMonthRentIfNeeded(TenantProfile tenant) {
-        if (tenant.getAllocatedRoom() == null || !tenant.isActive()) return;
+        if (tenant.getAllocatedRoom() == null || !tenant.isActive()) {
+            return;
+        }
+
+        Hostel tenantHostel = tenant.getHostel();
+        if (tenantHostel == null) {
+            throw new BadRequestException("Tenant is not associated with a hostel");
+        }
+
         List<Payment> rentPayments = paymentRepository.findByTenant(tenant).stream()
                 .filter(p -> p.getType() == null || p.getType() == PaymentType.RENT)
                 .collect(Collectors.toList());
 
         String currentMonth = YearMonth.now().toString();
         boolean hasPending = rentPayments.stream().anyMatch(p -> p.getStatus() == PaymentStatus.PENDING);
-        if (hasPending) return;
+        if (hasPending) {
+            return;
+        }
 
         boolean hasCurrentMonth = rentPayments.stream().anyMatch(p -> currentMonth.equals(p.getMonth()));
-        if (hasCurrentMonth) return;
+        if (hasCurrentMonth) {
+            return;
+        }
 
         int joinDay = tenant.getAllocationDate() != null
                 ? tenant.getAllocationDate().toLocalDate().getDayOfMonth()
@@ -130,7 +143,7 @@ public class PaymentService {
         if (isFirstMonth) {
             maintenanceAmount = tenant.getMaintenanceFeeAmount() != null && tenant.getMaintenanceFeeAmount() > 0
                     ? tenant.getMaintenanceFeeAmount()
-                    : roomTypeConfigRepository.findByHostelAndRoomTypeAndIsActiveTrue(userContextService.getCurrentUserHostel(), tenant.getAllocatedRoom().getRoomType())
+                    : roomTypeConfigRepository.findByHostelAndRoomTypeAndIsActiveTrue(tenantHostel, tenant.getAllocatedRoom().getRoomType())
                             .map(c -> c.getMaintenanceFeeAmount() != null && c.getMaintenanceFeeAmount() > 0 ? c.getMaintenanceFeeAmount() : 1000.0)
                             .orElse(1000.0);
         }
@@ -143,14 +156,13 @@ public class PaymentService {
                 .type(PaymentType.RENT)
                 .dueDate(dueDate)
                 .status(PaymentStatus.PENDING)
-                .hostel(userContextService.getCurrentUserHostel())  // ✅ Add hostel for data isolation
+                .hostel(tenantHostel)
                 .build();
         paymentRepository.save(payment);
     }
 
     public PaymentDto markPaid(Long id) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        Payment payment = hostelScopedAccessService.getPayment(id);
         payment.setStatus(PaymentStatus.PAID);
         payment.setPaymentDate(LocalDate.now());
         Payment saved = paymentRepository.save(payment);
@@ -158,10 +170,9 @@ public class PaymentService {
     }
 
     public PaymentDto approvePayment(Long id) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        Payment payment = hostelScopedAccessService.getPayment(id);
         if (payment.getStatus() != PaymentStatus.SUBMITTED) {
-            throw new RuntimeException("Only submitted payments can be approved");
+            throw new BadRequestException("Only submitted payments can be approved");
         }
         payment.setStatus(PaymentStatus.PAID);
         payment.setPaymentDate(LocalDate.now());
@@ -171,37 +182,39 @@ public class PaymentService {
 
     /**
      * Tenant submits payment for their own pending rent.
-     * For online (PHONEPE, GOOGLE_PAY, AMAZON_PAY): marks SUBMITTED (awaiting owner approval).
-     * For Cash: keeps PENDING (admin marks paid when cash received).
+     * For online payments, marks SUBMITTED until owner approval.
+     * For cash, keeps PENDING until the owner confirms receipt.
      */
     public PaymentDto submitTenantPayment(Long tenantId, Long paymentId, String paymentMethod) {
-        TenantProfile tenant = tenantProfileRepository.findById(tenantId)
-                .orElseThrow(() -> new RuntimeException("Tenant not found"));
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        TenantProfile tenant = hostelScopedAccessService.getTenant(tenantId);
+        Payment payment = hostelScopedAccessService.getPayment(paymentId);
+        String normalizedMethod = paymentMethod != null ? paymentMethod.trim() : "";
+
+        if (normalizedMethod.isEmpty()) {
+            throw new BadRequestException("Payment method is required");
+        }
+
         if (!payment.getTenant().getId().equals(tenant.getId())) {
-            throw new RuntimeException("You can only pay for your own rent");
+            throw new BadRequestException("You can only pay for your own rent");
         }
         if (payment.getStatus() != PaymentStatus.PENDING) {
-            throw new RuntimeException("This payment is already " + payment.getStatus());
+            throw new BadRequestException("This payment is already " + payment.getStatus());
         }
-        payment.setPaymentMethod(paymentMethod);
-        
-        // For online payments, mark as SUBMITTED (awaiting owner approval)
-        if (!"Cash".equals(paymentMethod)) {
+
+        payment.setPaymentMethod(normalizedMethod);
+        if (!"Cash".equals(normalizedMethod)) {
             payment.setStatus(PaymentStatus.SUBMITTED);
             payment.setPaymentDate(LocalDate.now());
         } else {
-            // For Cash, keep as PENDING until owner confirms
             payment.setStatus(PaymentStatus.PENDING);
         }
-        
+
         Payment saved = paymentRepository.save(payment);
         return toDto(saved);
     }
 
     public double calculateMonthlyRevenue(String month) {
-        Hostel currentHostel = userContextService.getCurrentUserHostel();
+        Hostel currentHostel = hostelScopedAccessService.getCurrentHostel();
         return paymentRepository.findByHostelAndMonthAndStatus(currentHostel, month, PaymentStatus.PAID)
                 .stream()
                 .mapToDouble(Payment::getAmount)
