@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenants API Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Tenants API Debug</h1>
+    <button onclick="testTenantsAPI()">Test /admin/tenants API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testTenantsAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                // Get token from localStorage
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    resultDiv.innerHTML = '<p class="error">No token found in localStorage. Please login first.</p>';
+                    return;
+                }
+                
+                console.log('Making request to /admin/tenants...');
+                const response = await fetch('http://localhost:8080/api/admin/tenants', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <p class="error">Error: ${response.status} ${response.statusText}</p>
+                        <pre>${errorText}</pre>
+                    `;
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                console.log('Data type:', typeof data);
+                console.log('Is array?', Array.isArray(data));
+                console.log('Data length:', data?.length);
+                
+                resultDiv.innerHTML = `
+                    <p class="success">Success! API returned data</p>
+                    <p><strong>Type:</strong> ${typeof data}</p>
+                    <p><strong>Is Array:</strong> ${Array.isArray(data)}</p>
+                    <p><strong>Length:</strong> ${data?.length || 'N/A'}</p>
+                    <h3>Raw Response:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+                // Test filter method
+                if (Array.isArray(data)) {
+                    try {
+                        const filtered = data.filter(t => t);
+                        resultDiv.innerHTML += `<p class="success">Filter method works! Filtered length: ${filtered.length}</p>`;
+                    } catch (e) {
+                        resultDiv.innerHTML += `<p class="error">Filter method failed: ${e.message}</p>`;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <p class="error">Network Error: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

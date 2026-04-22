@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LocalStorage Test</title>
+</head>
+<body>
+    <h1>LocalStorage Test</h1>
+    <button onclick="testLocalStorage()">Test LocalStorage</button>
+    <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+    <button onclick="showLocalStorage()">Show Current Storage</button>
+    <div id="results"></div>
+    
+    <script>
+        function testLocalStorage() {
+            try {
+                localStorage.setItem('test-token', 'test-value');
+                localStorage.setItem('test-role', 'ADMIN');
+                localStorage.setItem('test-userId', '123');
+                
+                const token = localStorage.getItem('test-token');
+                const role = localStorage.getItem('test-role');
+                const userId = localStorage.getItem('test-userId');
+                
+                document.getElementById('results').innerHTML = `
+                    <h3>LocalStorage Test Results:</h3>
+                    <p>✅ Token: ${token}</p>
+                    <p>✅ Role: ${role}</p>
+                    <p>✅ User ID: ${userId}</p>
+                    <p><strong>LocalStorage is working correctly!</strong></p>
+                `;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `
+                    <h3>❌ LocalStorage Error:</h3>
+                    <p>${error.message}</p>
+                    <p><strong>Your browser may be blocking localStorage!</strong></p>
+                `;
+            }
+        }
+        
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.getElementById('results').innerHTML = '<p>LocalStorage cleared!</p>';
+        }
+        
+        function showLocalStorage() {
+            const allKeys = Object.keys(localStorage);
+            let html = '<h3>Current LocalStorage:</h3>';
+            allKeys.forEach(key => {
+                html += `<p><strong>${key}:</strong> ${localStorage.getItem(key)}</p>`;
+            });
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        // Auto-test on page load
+        window.onload = function() {
+            testLocalStorage();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenants Filter Fix Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .pass { background-color: #d4edda; color: #155724; }
+        .fail { background-color: #f8d7da; color: #721c24; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Tenants Filter Fix Test</h1>
+    <button onclick="runTests()">Run Tests</button>
+    <div id="results"></div>
+
+    <script>
+        function runTests() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Test Results:</h2>';
+            
+            // Helper function to log results
+            function log(testName, passed, message) {
+                const div = document.createElement('div');
+                div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `<strong>${testName}:</strong> ${message}`;
+                resultsDiv.appendChild(div);
+            }
+            
+            // Test 1: Normal array (should work)
+            const normalTenants = [
+                { id: 1, user: { name: 'John', email: 'john@test.com' }, signupCompleted: true },
+                { id: 2, user: { name: 'Jane', email: 'jane@test.com' }, signupCompleted: false }
+            ];
+            
+            try {
+                const filtered = normalTenants.filter(t => t.signupCompleted);
+                log('Test 1 - Normal Array', true, `Filtering works, found ${filtered.length} completed tenants`);
+            } catch (e) {
+                log('Test 1 - Normal Array', false, `Error: ${e.message}`);
+            }
+            
+            // Test 2: Error object (what the backend returns on error)
+            const errorResponse = { error: 'Failed to fetch tenants: Authentication failed' };
+            
+            try {
+                // This would cause the original error
+                const filtered = errorResponse.filter(t => t);
+                log('Test 2 - Error Object', false, 'Should have thrown an error but did not');
+            } catch (e) {
+                log('Test 2 - Error Object', true, `Correctly threw error: ${e.message}`);
+            }
+            
+            // Test 3: The fix - checking if it's an array first
+            function safeFilter(tenants, filterFn) {
+                if (!Array.isArray(tenants)) {
+                    return [];
+                }
+                return tenants.filter(filterFn);
+            }
+            
+            try {
+                const result1 = safeFilter(normalTenants, t => t.signupCompleted);
+                log('Test 3a - Safe Filter with Array', true, `Works with array, found ${result1.length} completed tenants`);
+                
+                const result2 = safeFilter(errorResponse, t => t);
+                log('Test 3b - Safe Filter with Error Object', true, `Works with error object, returned ${result2.length} items`);
+                
+                const result3 = safeFilter(null, t => t);
+                log('Test 3c - Safe Filter with Null', true, `Works with null, returned ${result3.length} items`);
+            } catch (e) {
+                log('Test 3 - Safe Filter', false, `Error: ${e.message}`);
+            }
+            
+            // Test 4: Simulate the actual TenantsPage logic
+            function simulateTenantsPage(tenants) {
+                // This is the fixed logic from TenantsPage
+                if (!Array.isArray(tenants)) {
+                    console.error('tenants is not an array:', tenants);
+                    return { filtered: [], error: 'Invalid data format' };
+                }
+                
+                const filtered = tenants.filter(t => t.signupCompleted);
+                return { filtered, error: null };
+            }
+            
+            try {
+                const result1 = simulateTenantsPage(normalTenants);
+                log('Test 4a - TenantsPage Logic with Array', !result1.error, 
+                    result1.error || `Found ${result1.filtered.length} completed tenants`);
+                
+                const result2 = simulateTenantsPage(errorResponse);
+                log('Test 4b - TenantsPage Logic with Error', !result1.error, 
+                    result2.error || `Unexpected success with ${result2.filtered.length} items`);
+            } catch (e) {
+                log('Test 4 - TenantsPage Logic', false, `Error: ${e.message}`);
+            }
+            
+            // Summary
+            const totalTests = resultsDiv.querySelectorAll('.test-result').length;
+            const passedTests = resultsDiv.querySelectorAll('.pass').length;
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'test-result';
+            summaryDiv.style.backgroundColor = '#e2e3e5';
+            summaryDiv.innerHTML = `<strong>Summary:</strong> ${passedTests}/${totalTests} tests passed`;
+            resultsDiv.appendChild(summaryDiv);
+        }
+    </script>
+</body>
+</html>

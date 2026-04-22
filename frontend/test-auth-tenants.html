@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication & Tenants API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        button { padding: 8px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Authentication & Tenants API Test</h1>
+    
+    <div class="section">
+        <h2>1. Check Authentication Status</h2>
+        <button onclick="checkAuth()">Check Current Auth</button>
+        <div id="auth-status"></div>
+    </div>
+    
+    <div class="section">
+        <h2>2. Test Login (if needed)</h2>
+        <input type="email" id="email" placeholder="Email" value="admin@pgms.com">
+        <input type="password" id="password" placeholder="Password" value="admin123">
+        <button onclick="testLogin()">Login</button>
+        <div id="login-result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>3. Test Tenants API</h2>
+        <button onclick="testTenantsAPI()">Test /admin/tenants</button>
+        <div id="tenants-result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>4. Debug Info</h2>
+        <button onclick="showDebugInfo()">Show Debug Info</button>
+        <div id="debug-info"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            const userId = localStorage.getItem('userId');
+            
+            const authDiv = document.getElementById('auth-status');
+            if (token) {
+                authDiv.innerHTML = `
+                    <p class="success">✅ Token found: ${token.substring(0, 20)}...</p>
+                    <p>Role: ${role || 'Not found'}</p>
+                    <p>User ID: ${userId || 'Not found'}</p>
+                `;
+            } else {
+                authDiv.innerHTML = '<p class="error">❌ No authentication token found</p>';
+            }
+        }
+        
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginDiv = document.getElementById('login-result');
+            
+            try {
+                loginDiv.innerHTML = '<p>Attempting login...</p>';
+                
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('name', data.name);
+                    
+                    loginDiv.innerHTML = `
+                        <p class="success">✅ Login successful!</p>
+                        <p>Token: ${data.token.substring(0, 20)}...</p>
+                        <p>Role: ${data.role}</p>
+                        <p>Name: ${data.name}</p>
+                    `;
+                    
+                    // Auto-check auth after successful login
+                    setTimeout(checkAuth, 500);
+                } else {
+                    loginDiv.innerHTML = `<p class="error">❌ Login failed: ${data.message || 'Unknown error'}</p>`;
+                }
+            } catch (error) {
+                loginDiv.innerHTML = `<p class="error">❌ Network error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testTenantsAPI() {
+            const token = localStorage.getItem('token');
+            const tenantsDiv = document.getElementById('tenants-result');
+            
+            if (!token) {
+                tenantsDiv.innerHTML = '<p class="error">❌ Please login first</p>';
+                return;
+            }
+            
+            try {
+                tenantsDiv.innerHTML = '<p>Fetching tenants...</p>';
+                
+                const response = await fetch(`${API_BASE}/admin/tenants`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (response.ok) {
+                    tenantsDiv.innerHTML = `
+                        <p class="success">✅ API call successful!</p>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Data Type:</strong> ${typeof data}</p>
+                        <p><strong>Is Array:</strong> ${Array.isArray(data)}</p>
+                        <p><strong>Length:</strong> ${Array.isArray(data) ? data.length : 'N/A'}</p>
+                        <h4>Response Data:</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    tenantsDiv.innerHTML = `
+                        <p class="error">❌ API Error: ${response.status} ${response.statusText}</p>
+                        <h4>Error Response:</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                tenantsDiv.innerHTML = `<p class="error">❌ Network Error: ${error.message}</p>`;
+            }
+        }
+        
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.innerHTML = `
+                <h4>Current LocalStorage:</h4>
+                <pre>${JSON.stringify(localStorage, null, 2)}</pre>
+                
+                <h4>Current SessionStorage:</h4>
+                <pre>${JSON.stringify(sessionStorage, null, 2)}</pre>
+                
+                <h4>Browser Info:</h4>
+                <p>User Agent: ${navigator.userAgent}</p>
+                <p>Current URL: ${window.location.href}</p>
+            `;
+        }
+        
+        // Auto-check auth on page load
+        window.onload = function() {
+            checkAuth();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Debug Test</title>
+</head>
+<body>
+    <h1>Authentication Debug Test</h1>
+    <div id="auth-status"></div>
+    <div id="token-info"></div>
+    <div id="test-results"></div>
+    
+    <script>
+        // Check localStorage
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+        const userId = localStorage.getItem('userId');
+        const name = localStorage.getItem('name');
+        
+        document.getElementById('auth-status').innerHTML = `
+            <h2>Auth Status:</h2>
+            <p>Token: ${token ? 'EXISTS' : 'MISSING'}</p>
+            <p>Role: ${role || 'MISSING'}</p>
+            <p>User ID: ${userId || 'MISSING'}</p>
+            <p>Name: ${name || 'MISSING'}</p>
+        `;
+        
+        if (token) {
+            document.getElementById('token-info').innerHTML = `
+                <h2>Token Info:</h2>
+                <p>Token length: ${token.length}</p>
+                <p>Token starts with: ${token.substring(0, 20)}...</p>
+            `;
+            
+            // Test API call
+            fetch('https://pghostelmanagement.onrender.com/api/admin/rooms', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                document.getElementById('test-results').innerHTML = `
+                    <h2>API Test Results:</h2>
+                    <p>Status: ${response.status}</p>
+                    <p>Status Text: ${response.statusText}</p>
+                    <p>Headers: ${JSON.stringify([...response.headers.entries()])}</p>
+                `;
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('test-results').innerHTML += `
+                    <p>Response Data: ${JSON.stringify(data)}</p>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('test-results').innerHTML += `
+                    <p>Error: ${error.message}</p>
+                `;
+            });
+        } else {
+            document.getElementById('test-results').innerHTML = `
+                <h2>API Test Results:</h2>
+                <p>No token available - cannot test API</p>
+            `;
+        }
+    </script>
+</body>
+</html>
