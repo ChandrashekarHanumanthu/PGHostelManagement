@@ -305,7 +305,7 @@ const RoomSettingsPage: React.FC = () => {
             <Settings className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Room settings</h2>
+            <h2 className="text-xl font-semibold text-slate-900">Room settings</h2>
             <p className="text-sm text-slate-500">Configure room types and generate inventory</p>
           </div>
         </div>
@@ -391,7 +391,7 @@ const RoomSettingsPage: React.FC = () => {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Type</p>
-                    <p className="mt-1 truncate text-sm font-bold text-slate-900">
+                    <p className="mt-1 truncate text-sm font-semibold text-slate-900">
                       {roomTypeLabels[type as keyof typeof roomTypeLabels]}
                     </p>
                   </div>
@@ -620,7 +620,7 @@ const RoomSettingsPage: React.FC = () => {
                           {roomTypeIcons[config.roomType]}
                         </span>
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-bold text-slate-900">{config.hostelName}</p>
+                          <p className="truncate text-sm font-semibold text-slate-900">{config.hostelName}</p>
                           <p className="truncate text-xs text-slate-500">{roomTypeLabels[config.roomType]}</p>
                         </div>
                       </div>

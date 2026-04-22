@@ -417,7 +417,7 @@ const AdminDashboard: React.FC = () => {
         <div className="admin-panel p-5 md:p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="font-admin-heading text-xl font-bold text-slate-900">Quick Actions</h3>
+              <h3 className="font-admin-heading text-xl font-semibold text-slate-900">Quick Actions</h3>
               <p className="text-sm text-slate-500">Common admin workflows for day-to-day operations</p>
             </div>
           </div>
@@ -449,7 +449,7 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="admin-panel p-5 md:p-6">
-          <h3 className="font-admin-heading text-xl font-bold text-slate-900">Operations Radar</h3>
+          <h3 className="font-admin-heading text-xl font-semibold text-slate-900">Operations Radar</h3>
           <p className="text-sm text-slate-500">Live operational signals for this month</p>
           <div className="mt-4 space-y-3">
             {operations.map((row) => (
@@ -470,7 +470,7 @@ const AdminDashboard: React.FC = () => {
 
       <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <div className="admin-panel p-5 md:p-6">
-          <h3 className="font-admin-heading text-xl font-bold text-slate-900">Collection Funnel</h3>
+          <h3 className="font-admin-heading text-xl font-semibold text-slate-900">Collection Funnel</h3>
           <p className="text-sm text-slate-500">Revenue readiness indicators for rent cycle planning</p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -503,11 +503,11 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="admin-panel p-5 md:p-6">
-          <h3 className="font-admin-heading text-xl font-bold text-slate-900">Action Center</h3>
+          <h3 className="font-admin-heading text-xl font-semibold text-slate-900">Action Center</h3>
           <p className="text-sm text-slate-500">Prioritized next steps for today</p>
           <div className="mt-4 space-y-3">
             <Link to="/admin/complaints" className="saas-quick-link block">
-              <p className="text-sm font-bold text-slate-900">Resolve complaint queue</p>
+              <p className="text-sm font-semibold text-slate-900">Resolve complaint queue</p>
               <p className="mt-1 text-xs text-slate-500">
                 {dashboard.pendingComplaints > 0
                   ? `${dashboard.pendingComplaints} tickets need review`
@@ -515,15 +515,15 @@ const AdminDashboard: React.FC = () => {
               </p>
             </Link>
             <Link to="/admin/payments" className="saas-quick-link block">
-              <p className="text-sm font-bold text-slate-900">Audit payment history</p>
+              <p className="text-sm font-semibold text-slate-900">Audit payment history</p>
               <p className="mt-1 text-xs text-slate-500">Verify tenant entries and pending approvals</p>
             </Link>
             <Link to="/admin/notices" className="saas-quick-link block">
-              <p className="text-sm font-bold text-slate-900">Publish notice</p>
+              <p className="text-sm font-semibold text-slate-900">Publish notice</p>
               <p className="mt-1 text-xs text-slate-500">Send reminders for dues or maintenance updates</p>
             </Link>
             <Link to="/admin/rooms" className="saas-quick-link block">
-              <p className="text-sm font-bold text-slate-900">Optimize room inventory</p>
+              <p className="text-sm font-semibold text-slate-900">Optimize room inventory</p>
               <p className="mt-1 text-xs text-slate-500">
                 {vacantRooms > 0 ? `${vacantRooms} rooms available for allocation` : 'All rooms occupied'}
               </p>

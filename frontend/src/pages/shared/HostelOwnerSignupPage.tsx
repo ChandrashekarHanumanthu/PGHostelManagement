@@ -165,10 +165,10 @@ const HostelOwnerSignupPage: React.FC = () => {
               <div className="bg-white/10 p-2 rounded-xl backdrop-blur-sm border border-white/10">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
-              <span className="font-heading font-bold text-lg text-white">PG Manager <span className="text-brand-200">Pro</span></span>
+              <span className="font-heading font-semibold text-lg text-white" style={{fontFamily: 'santhoshi, sans-serif'}}>PG Manager <span className="text-brand-200">Pro</span></span>
             </div>
 
-            <h2 className="font-heading text-3xl font-bold text-white mb-3 leading-tight">
+            <h2 className="font-heading text-3xl font-semibold text-white mb-3 leading-tight" style={{fontFamily: 'santhoshi, sans-serif'}}>
               Set up your PG in<br />5 minutes flat.
             </h2>
             <p className="text-sm text-slate-300 max-w-sm mb-8">
@@ -195,7 +195,7 @@ const HostelOwnerSignupPage: React.FC = () => {
               <div className="flex gap-0.5 mb-2">{[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />)}</div>
               <p className="text-sm text-white/80 italic mb-2">"Signed up, added my PG, uploaded tenants — all done in one evening. Wish I'd found this years ago."</p>
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-400 to-purple-400 flex items-center justify-center text-[9px] font-bold text-white">RK</div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-400 to-purple-400 flex items-center justify-center text-[9px] font-semibold text-white">RK</div>
                 <div>
                   <div className="text-xs font-semibold text-white">Ramesh Kumar</div>
                   <div className="text-[10px] text-slate-400">Sri Venkateswara PG, HITEC City</div>
@@ -212,7 +212,7 @@ const HostelOwnerSignupPage: React.FC = () => {
               { num: '99%', label: 'Uptime' },
             ].map((s, i) => (
               <div key={i} className="text-center bg-white/5 rounded-lg px-2 py-2.5 border border-white/5">
-                <div className="text-lg font-heading font-bold text-white">{s.num}</div>
+                <div className="text-lg font-heading font-semibold text-white" style={{fontFamily: 'santhoshi, sans-serif'}}>{s.num}</div>
                 <div className="text-[10px] text-slate-400">{s.label}</div>
               </div>
             ))}
@@ -227,16 +227,16 @@ const HostelOwnerSignupPage: React.FC = () => {
               <div className="bg-gradient-to-br from-brand-500 to-brand-700 p-2 rounded-xl">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
-              <span className="font-heading font-bold text-lg text-gray-900">PG Manager <span className="text-gradient-brand">Pro</span></span>
+              <span className="font-heading font-semibold text-lg text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>PG Manager <span className="text-gradient-brand">Pro</span></span>
             </div>
-            <h1 className="font-heading text-2xl font-bold text-gray-900 mb-1">Create your PG</h1>
+            <h1 className="font-heading text-2xl font-semibold text-gray-900 mb-1" style={{fontFamily: 'santhoshi, sans-serif'}}>Create your PG</h1>
             <p className="text-xs text-gray-500">Free for 14 days · No credit card</p>
           </div>
 
           <div className="max-w-md mx-auto w-full">
             {/* Desktop heading */}
             <div className="hidden lg:block mb-6">
-              <h1 className="font-heading text-2xl font-bold text-gray-900 mb-1">Create your account</h1>
+              <h1 className="font-heading text-2xl font-semibold text-gray-900 mb-1" style={{fontFamily: 'santhoshi, sans-serif'}}>Create your account</h1>
               <p className="text-sm text-gray-500">Start managing your PG in minutes</p>
             </div>
 
@@ -245,7 +245,7 @@ const HostelOwnerSignupPage: React.FC = () => {
               {stepNames.map((name, i) => (
                 <React.Fragment key={i}>
                   <button onClick={() => i < step && setStep(i)} className={`flex items-center gap-1.5 ${i <= step ? 'text-brand-600' : 'text-gray-400'}`}>
-                    <div className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${i < step ? 'bg-brand-500 text-white' : i === step ? 'bg-brand-100 text-brand-700 ring-2 ring-brand-200' : 'bg-gray-100 text-gray-400'}`}>
+                    <div className={`w-7 h-7 rounded-full text-xs font-semibold flex items-center justify-center transition-all ${i < step ? 'bg-brand-500 text-white' : i === step ? 'bg-brand-100 text-brand-700 ring-2 ring-brand-200' : 'bg-gray-100 text-gray-400'}`}>
                       {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}
                     </div>
                     <span className="text-xs font-medium">{name}</span>

@@ -5,7 +5,6 @@ import LoginPage from './pages/shared/LoginPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import ForgotPasswordPage from './pages/shared/ForgotPasswordPage';
 import HostelOwnerSignupPage from './pages/shared/HostelOwnerSignupPage';
-import LandingPage from './pages/shared/LandingPage';
 import HomePage from './pages/marketing/HomePage';
 import FeaturesPage from './pages/marketing/FeaturesPage';
 import PricingPage from './pages/marketing/PricingPage';

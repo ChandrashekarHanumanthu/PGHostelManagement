@@ -1,0 +1,188 @@
+.marketing-shell {
+  --mk-bg: #f5f8fc;
+  --mk-bg-soft: #eef4fb;
+  --mk-ink: #0f172a;
+  --mk-ink-muted: #475569;
+  --mk-primary: #0f6fff;
+  --mk-primary-strong: #0756c7;
+  --mk-accent: #0ea5a4;
+  --mk-card: #ffffff;
+  --mk-card-border: #d9e3f0;
+  --mk-dark: #0a1a2c;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(15, 111, 255, 0.08), transparent 60%),
+    radial-gradient(1000px 500px at 100% 0%, rgba(14, 165, 164, 0.08), transparent 55%),
+    var(--mk-bg);
+  color: var(--mk-ink);
+}
+
+.marketing-shell,
+.marketing-shell * {
+  font-family: 'santhoshi', 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
+.mk-wrap {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.mk-nav {
+  background: rgba(245, 248, 252, 0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.mk-nav-link {
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.mk-nav-link:hover {
+  background: rgba(15, 111, 255, 0.1);
+  color: #0f172a;
+}
+
+.mk-nav-link.active {
+  color: #0f6fff;
+  background: rgba(15, 111, 255, 0.12);
+}
+
+.mk-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.15rem;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, var(--mk-primary), #1f8bff);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 14px 30px -18px rgba(15, 111, 255, 0.8);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.mk-button-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+  box-shadow: 0 20px 34px -22px rgba(15, 111, 255, 0.95);
+}
+
+.mk-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.15rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--mk-card-border);
+  background: #fff;
+  color: #1e293b;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.mk-button-secondary:hover {
+  border-color: #b8c7dc;
+  background: #f8fbff;
+}
+
+.mk-main {
+  padding-top: 5.3rem;
+}
+
+.mk-section {
+  padding: 4.5rem 0;
+}
+
+.mk-section-alt {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), #eef4fb 28%, #eef4fb 72%, rgba(255, 255, 255, 0));
+}
+
+.mk-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f6fff;
+  background: rgba(15, 111, 255, 0.09);
+  border: 1px solid rgba(15, 111, 255, 0.2);
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+}
+
+.mk-title {
+  margin-top: 1rem;
+  font-size: clamp(1.9rem, 5vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.mk-subtitle {
+  margin-top: 1rem;
+  font-size: clamp(0.96rem, 1.8vw, 1.12rem);
+  line-height: 1.75;
+  color: var(--mk-ink-muted);
+}
+
+.mk-card {
+  background: var(--mk-card);
+  border: 1px solid var(--mk-card-border);
+  border-radius: 1rem;
+  box-shadow: 0 18px 35px -30px rgba(16, 24, 40, 0.35);
+}
+
+.mk-card-soft {
+  background: linear-gradient(165deg, #ffffff, #f6faff);
+}
+
+.mk-dark-panel {
+  border-radius: 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background:
+    radial-gradient(500px 200px at 15% 0%, rgba(15, 111, 255, 0.25), transparent 60%),
+    radial-gradient(500px 200px at 80% -10%, rgba(14, 165, 164, 0.2), transparent 60%),
+    var(--mk-dark);
+  color: #e2e8f0;
+}
+
+.mk-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mk-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.mk-footer {
+  background: #071320;
+  color: #c6d3e3;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.mk-footer a {
+  color: #a9bed6;
+  transition: color 0.2s ease;
+}
+
+.mk-footer a:hover {
+  color: #ecf4ff;
+}

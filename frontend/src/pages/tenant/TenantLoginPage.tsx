@@ -53,7 +53,7 @@ const TenantLoginPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Tenant Login</h1>
+          <h1 className="text-3xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>Tenant Login</h1>
           <p className="text-gray-600 mt-2">
             Access your tenant dashboard
           </p>

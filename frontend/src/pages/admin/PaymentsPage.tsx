@@ -165,11 +165,11 @@ const PaymentsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Payment Management</h1>
+              <h1 className="text-3xl font-semibold mb-2">Payment Management</h1>
               <p className="text-indigo-100">Monitor and manage all tenant payments efficiently</p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-indigo-100">{stats.total}</div>
+              <div className="text-2xl font-semibold text-indigo-100">{stats.total}</div>
               <div className="text-sm text-indigo-200">Total Payments</div>
             </div>
           </div>
@@ -196,7 +196,7 @@ const PaymentsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+                <div className="text-2xl font-semibold text-gray-900">{stats.total}</div>
                 <div className="text-sm text-gray-600">Total</div>
               </div>
               <div className="bg-gray-100 rounded-full p-3">
@@ -208,7 +208,7 @@ const PaymentsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{stats.paid}</div>
+                <div className="text-2xl font-semibold text-green-600">{stats.paid}</div>
                 <div className="text-sm text-gray-600">Paid</div>
               </div>
               <div className="bg-green-100 rounded-full p-3">
@@ -220,7 +220,7 @@ const PaymentsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{stats.submitted}</div>
+                <div className="text-2xl font-semibold text-blue-600">{stats.submitted}</div>
                 <div className="text-sm text-gray-600">Submitted</div>
               </div>
               <div className="bg-blue-100 rounded-full p-3">
@@ -232,7 +232,7 @@ const PaymentsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+                <div className="text-2xl font-semibold text-yellow-600">{stats.pending}</div>
                 <div className="text-sm text-gray-600">Pending</div>
               </div>
               <div className="bg-yellow-100 rounded-full p-3">
@@ -244,7 +244,7 @@ const PaymentsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-indigo-600">{formatCurrency(stats.totalAmount)}</div>
+                <div className="text-2xl font-semibold text-indigo-600">{formatCurrency(stats.totalAmount)}</div>
                 <div className="text-sm text-gray-600">Total Amount</div>
               </div>
               <div className="bg-indigo-100 rounded-full p-3">
@@ -256,7 +256,7 @@ const PaymentsPage: React.FC = () => {
 
         {/* Filters */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Filter Payments</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Filter Payments</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Month</label>
@@ -292,7 +292,7 @@ const PaymentsPage: React.FC = () => {
         {/* Payments List */}
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Payments for {formatMonth(month)}
             </h2>
             <div className="text-sm text-gray-500">

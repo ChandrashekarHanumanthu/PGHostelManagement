@@ -48,11 +48,11 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
         
-        <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Welcome back</h2>
+        <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>Welcome back</h2>
         <p className="text-gray-600 text-center mb-6">Sign in to your PG Manager account</p>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-2">Email</label>
+            <label className="block text-gray-700 text-sm font-medium mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>Email</label>
             <input
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               type="email"
@@ -63,7 +63,7 @@ const LoginPage: React.FC = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-medium mb-2">Password</label>
+            <label className="block text-gray-700 text-sm font-medium mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>Password</label>
             <input
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               type="password"

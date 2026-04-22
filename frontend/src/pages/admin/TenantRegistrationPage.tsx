@@ -211,7 +211,7 @@ const TenantRegistrationPage: React.FC = () => {
             <UserPlus className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Register tenant</h2>
+            <h2 className="text-xl font-semibold text-slate-900">Register tenant</h2>
             <p className="text-sm text-slate-500">Add a tenant and send the signup email</p>
           </div>
         </div>
@@ -476,7 +476,7 @@ const TenantRegistrationPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-3 rounded-xl bg-brand-600 px-6 py-4 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-3 rounded-xl bg-brand-600 px-6 py-4 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

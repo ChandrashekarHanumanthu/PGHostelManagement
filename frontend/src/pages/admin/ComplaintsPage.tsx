@@ -127,11 +127,11 @@ const ComplaintsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Complaints & Support</h1>
+              <h1 className="text-3xl font-semibold mb-2">Complaints & Support</h1>
               <p className="text-orange-100">We're here to help resolve your concerns</p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-orange-100">{complaints.length}</div>
+              <div className="text-2xl font-semibold text-orange-100">{complaints.length}</div>
               <div className="text-sm text-orange-200">Total Complaints</div>
             </div>
           </div>
@@ -149,7 +149,7 @@ const ComplaintsPage: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">File a New Complaint</h2>
+                <h2 className="text-xl font-semibold text-gray-900">File a New Complaint</h2>
                 <p className="text-gray-600">Let us know about any issues you're facing</p>
               </div>
             </div>
@@ -205,7 +205,7 @@ const ComplaintsPage: React.FC = () => {
         {/* Complaints List */}
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               {(role === 'ADMIN' || role === 'OWNER') ? 'All Complaints' : 'My Complaints'}
             </h2>
             <div className="flex items-center space-x-2">
@@ -317,7 +317,7 @@ const ComplaintsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-yellow-600">{complaints.filter(c => c.status === 'OPEN').length}</div>
+                <div className="text-2xl font-semibold text-yellow-600">{complaints.filter(c => c.status === 'OPEN').length}</div>
                 <div className="text-sm text-gray-600">Open Complaints</div>
               </div>
               <div className="bg-yellow-100 rounded-full p-3">
@@ -329,7 +329,7 @@ const ComplaintsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{complaints.filter(c => c.status === 'IN_PROGRESS').length}</div>
+                <div className="text-2xl font-semibold text-blue-600">{complaints.filter(c => c.status === 'IN_PROGRESS').length}</div>
                 <div className="text-sm text-gray-600">In Progress</div>
               </div>
               <div className="bg-blue-100 rounded-full p-3">
@@ -341,7 +341,7 @@ const ComplaintsPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{complaints.filter(c => c.status === 'RESOLVED').length}</div>
+                <div className="text-2xl font-semibold text-green-600">{complaints.filter(c => c.status === 'RESOLVED').length}</div>
                 <div className="text-sm text-gray-600">Resolved</div>
               </div>
               <div className="bg-green-100 rounded-full p-3">

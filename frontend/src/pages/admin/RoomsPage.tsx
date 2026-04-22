@@ -218,7 +218,7 @@ const RoomsPage: React.FC = () => {
             <DoorOpen className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Rooms</h2>
+            <h2 className="text-xl font-semibold text-slate-900">Rooms</h2>
             <p className="text-sm text-slate-500">Manage inventory, availability, and assignments</p>
           </div>
         </div>
@@ -238,7 +238,7 @@ const RoomsPage: React.FC = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Total rooms</p>
-                <p className="mt-2 text-2xl font-extrabold text-slate-900">{rooms.length}</p>
+                <p className="mt-2 text-2xl font-semibold text-slate-900">{rooms.length}</p>
                 <p className="mt-1 text-xs text-slate-500">All room types</p>
               </div>
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-slate-700">
@@ -250,7 +250,7 @@ const RoomsPage: React.FC = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Available</p>
-                <p className="mt-2 text-2xl font-extrabold text-slate-900">{availableRoomsCount}</p>
+                <p className="mt-2 text-2xl font-semibold text-slate-900">{availableRoomsCount}</p>
                 <p className="mt-1 text-xs text-slate-500">Ready for allocation</p>
               </div>
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
@@ -262,7 +262,7 @@ const RoomsPage: React.FC = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Occupied</p>
-                <p className="mt-2 text-2xl font-extrabold text-slate-900">{occupiedRoomsCount}</p>
+                <p className="mt-2 text-2xl font-semibold text-slate-900">{occupiedRoomsCount}</p>
                 <p className="mt-1 text-xs text-slate-500">{occupancyRate}% utilization</p>
               </div>
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-50 text-rose-700">
@@ -274,7 +274,7 @@ const RoomsPage: React.FC = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Maintenance</p>
-                <p className="mt-2 text-2xl font-extrabold text-slate-900">{maintenanceRoomsCount}</p>
+                <p className="mt-2 text-2xl font-semibold text-slate-900">{maintenanceRoomsCount}</p>
                 <p className="mt-1 text-xs text-slate-500">Needs attention</p>
               </div>
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-amber-50 text-amber-700">
@@ -528,7 +528,7 @@ const RoomsPage: React.FC = () => {
                             {roomTypeIcons[room.roomType]}
                           </span>
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-bold text-slate-900">{room.roomNumber}</p>
+                            <p className="truncate text-sm font-semibold text-slate-900">{room.roomNumber}</p>
                             <p className="truncate text-xs text-slate-500">{roomTypeLabels[room.roomType]}</p>
                           </div>
                         </div>
@@ -591,7 +591,7 @@ const RoomsPage: React.FC = () => {
             <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Room Members</p>
-                <h3 className="mt-1 text-lg font-bold text-slate-900">{membersRoom.roomNumber}</h3>
+                <h3 className="mt-1 text-lg font-semibold text-slate-900">{membersRoom.roomNumber}</h3>
                 <p className="mt-1 text-sm text-slate-500">
                   {roomTypeLabels[membersRoom.roomType]} • {membersRoom.currentOccupancy}/{getCapacityForRoomType(membersRoom.roomType)} occupied
                 </p>

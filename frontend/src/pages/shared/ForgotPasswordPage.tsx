@@ -90,7 +90,7 @@ const ForgotPasswordPage: React.FC = () => {
         {step === 'email' && (
           <form onSubmit={handleSendCode}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-semibold mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>
                 Email Address
               </label>
               <input
@@ -104,7 +104,7 @@ const ForgotPasswordPage: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full disabled:opacity-50"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full disabled:opacity-50"
               disabled={loading}
             >
               {loading ? 'Sending...' : 'Send Reset Code'}
@@ -115,7 +115,7 @@ const ForgotPasswordPage: React.FC = () => {
         {step === 'code' && (
           <form onSubmit={handleVerifyCode}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-semibold mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>
                 Reset Code
               </label>
               <input
@@ -132,7 +132,7 @@ const ForgotPasswordPage: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full disabled:opacity-50"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full disabled:opacity-50"
               disabled={loading}
             >
               {loading ? 'Verifying...' : 'Verify Code'}
@@ -150,7 +150,7 @@ const ForgotPasswordPage: React.FC = () => {
         {step === 'reset' && (
           <form onSubmit={handleResetPassword}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-semibold mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>
                 New Password
               </label>
               <input
@@ -164,7 +164,7 @@ const ForgotPasswordPage: React.FC = () => {
               />
             </div>
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-semibold mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>
                 Confirm New Password
               </label>
               <input
@@ -179,7 +179,7 @@ const ForgotPasswordPage: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full disabled:opacity-50"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full disabled:opacity-50"
               disabled={loading}
             >
               {loading ? 'Resetting...' : 'Reset Password'}

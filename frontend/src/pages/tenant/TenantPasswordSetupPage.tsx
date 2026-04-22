@@ -117,7 +117,7 @@ const TenantPasswordSetupPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Invalid Password Setup Link</h2>
+            <h2 className="text-2xl font-semibold text-red-600 mb-4" style={{fontFamily: 'santhoshi, sans-serif'}}>Invalid Password Setup Link</h2>
             <p className="text-gray-600">{error}</p>
             <p className="text-sm text-gray-500 mt-4">
               Please contact the admin if you believe this is an error.
@@ -132,7 +132,7 @@ const TenantPasswordSetupPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Set Your Password</h1>
+          <h1 className="text-3xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>Set Your Password</h1>
           <p className="text-gray-600 mt-2">
             Welcome <span className="font-semibold">{tenantData?.name}</span>!
           </p>

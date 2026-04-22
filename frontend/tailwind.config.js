@@ -6,9 +6,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-        body: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        heading: ['"santhoshi"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        body: ['"santhoshi"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        sans: ['"santhoshi"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
       },
       colors: {
         brand: {

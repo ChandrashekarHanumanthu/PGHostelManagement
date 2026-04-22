@@ -127,7 +127,7 @@ const TenantProfilePage: React.FC = () => {
           <div className="mx-auto w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Profile Loading Failed</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>Profile Loading Failed</h2>
           <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={fetchProfile}
@@ -153,7 +153,7 @@ const TenantProfilePage: React.FC = () => {
                   <Home className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl md:text-2xl font-bold text-white">My Profile</h1>
+                  <h1 className="text-xl md:text-2xl font-semibold text-white" style={{fontFamily: 'santhoshi, sans-serif'}}>My Profile</h1>
                   <p className="text-green-100 text-sm md:text-base">View your personal information and room details</p>
                 </div>
               </div>
@@ -181,7 +181,7 @@ const TenantProfilePage: React.FC = () => {
                 </div>
                 
                 <div className="mt-4 md:mt-0 md:ml-6 text-center md:text-left flex-1 min-w-0">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{profile.name}</h2>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>{profile.name}</h2>
                   <div className="mt-2 flex flex-wrap justify-center md:justify-start gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                       <Shield className="h-3.5 w-3.5 mr-1" />

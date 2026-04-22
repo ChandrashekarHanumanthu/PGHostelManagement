@@ -104,7 +104,7 @@ const PaymentSettingsPage: React.FC = () => {
             />
             {settings.qrCodePath && !qrFile && (
               <div className="mt-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl max-w-xs">
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Current QR Code</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Current QR Code</p>
                 <img src={settings.qrCodePath} alt="Current QR Code" className="w-full aspect-square object-contain rounded-lg border border-gray-200 bg-white" />
               </div>
             )}

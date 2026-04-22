@@ -130,11 +130,11 @@ const NoticesPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Notices & Announcements</h1>
+              <h1 className="text-3xl font-semibold mb-2">Notices & Announcements</h1>
               <p className="text-purple-100">Stay updated with the latest information</p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-purple-100">{notices.length}</div>
+              <div className="text-2xl font-semibold text-purple-100">{notices.length}</div>
               <div className="text-sm text-purple-200">Total Notices</div>
             </div>
           </div>
@@ -172,7 +172,7 @@ const NoticesPage: React.FC = () => {
             ) : (
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">
+                  <h2 className="text-xl font-semibold text-gray-900">
                     {editingNotice ? 'Edit Notice' : 'Create New Notice'}
                   </h2>
                   <button
@@ -262,7 +262,7 @@ const NoticesPage: React.FC = () => {
               <div key={notice.id} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{notice.title}</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">{notice.title}</h3>
                     <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                       {notice.content}
                     </div>
@@ -330,7 +330,7 @@ const NoticesPage: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Delete Notice</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Delete Notice</h3>
                   <p className="text-gray-600">Are you sure you want to delete this notice? This action cannot be undone.</p>
                 </div>
               </div>

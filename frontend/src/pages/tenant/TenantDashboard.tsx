@@ -85,11 +85,11 @@ const TenantDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, {name}!</h1>
+              <h1 className="text-3xl font-semibold mb-2" style={{fontFamily: 'santhoshi, sans-serif'}}>Welcome back, {name}!</h1>
               <p className="text-blue-100">Here's what's happening in your hostel life</p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-blue-100">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div className="text-2xl font-semibold text-blue-100" style={{fontFamily: 'santhoshi, sans-serif'}}>{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
             </div>
           </div>
         </div>
@@ -109,7 +109,7 @@ const TenantDashboard: React.FC = () => {
               <span className="text-sm text-gray-500 font-medium">Your Room</span>
             </div>
             <div className="space-y-2">
-              <div className="text-2xl font-bold text-gray-900">{data?.room?.roomNumber || 'N/A'}</div>
+              <div className="text-2xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>{data?.room?.roomNumber || 'N/A'}</div>
               <div className="text-sm text-gray-600">{data?.room?.roomType || 'Standard'}</div>
               <div className="text-lg font-semibold text-blue-600">₹{data?.room?.rentAmount || 0}/month</div>
             </div>
@@ -126,7 +126,7 @@ const TenantDashboard: React.FC = () => {
               <span className="text-sm text-gray-500 font-medium">Complaints</span>
             </div>
             <div className="space-y-2">
-              <div className="text-2xl font-bold text-gray-900">{data?.openComplaints || 0}</div>
+              <div className="text-2xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>{data?.openComplaints || 0}</div>
               <div className="text-sm text-gray-600">Open complaints</div>
               {data?.openComplaints === 0 && (
                 <div className="text-sm text-green-600 font-medium">All resolved! 🎉</div>
@@ -146,7 +146,7 @@ const TenantDashboard: React.FC = () => {
               <span className="text-sm text-gray-500 font-medium">Notices</span>
             </div>
             <div className="space-y-2">
-              <div className="text-2xl font-bold text-gray-900">{data?.notices?.length || 0}</div>
+              <div className="text-2xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>{data?.notices?.length || 0}</div>
               <div className="text-sm text-gray-600">New notices</div>
               {data?.notices && data.notices.length > 0 && (
                 <div className="text-xs text-purple-600 font-medium">Stay updated!</div>
@@ -159,7 +159,7 @@ const TenantDashboard: React.FC = () => {
           {/* Payment History */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Payment History</h2>
+              <h2 className="text-xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>Payment History</h2>
               <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
                 View All →
               </button>
@@ -177,7 +177,7 @@ const TenantDashboard: React.FC = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-gray-900">₹{payment.amount}</div>
+                    <div className="font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>₹{payment.amount}</div>
                     <div className={`text-xs px-2 py-1 rounded-full font-medium border ${getStatusColor(payment.status)}`}>
                       {payment.status}
                     </div>
@@ -196,7 +196,7 @@ const TenantDashboard: React.FC = () => {
           {/* Latest Notices */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Latest Notices</h2>
+              <h2 className="text-xl font-semibold text-gray-900" style={{fontFamily: 'santhoshi, sans-serif'}}>Latest Notices</h2>
               <button className="text-purple-600 hover:text-purple-700 text-sm font-medium transition-colors">
                 View All →
               </button>
@@ -232,7 +232,7 @@ const TenantDashboard: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
-          <h3 className="text-lg font-bold mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold mb-4" style={{fontFamily: 'santhoshi, sans-serif'}}>Quick Actions</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-xl p-4 text-center transition-all duration-200 backdrop-blur-sm">
               <div className="text-2xl mb-2">💳</div>
