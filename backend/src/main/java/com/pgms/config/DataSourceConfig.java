@@ -19,7 +19,8 @@ public class DataSourceConfig {
             @Value("${DB_MIN_IDLE:0}") int minIdle,
             @Value("${DB_CONNECTION_TIMEOUT_MS:30000}") long connectionTimeoutMs,
             @Value("${DB_IDLE_TIMEOUT_MS:600000}") long idleTimeoutMs,
-            @Value("${DB_MAX_LIFETIME_MS:1800000}") long maxLifetimeMs
+            @Value("${DB_MAX_LIFETIME_MS:1800000}") long maxLifetimeMs,
+            @Value("${DB_INIT_FAIL_TIMEOUT_MS:-1}") long initializationFailTimeoutMs
     ) {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(normalizeJdbcUrl(rawDbUrl));
@@ -30,6 +31,7 @@ public class DataSourceConfig {
         dataSource.setConnectionTimeout(connectionTimeoutMs);
         dataSource.setIdleTimeout(idleTimeoutMs);
         dataSource.setMaxLifetime(maxLifetimeMs);
+        dataSource.setInitializationFailTimeout(initializationFailTimeoutMs);
         dataSource.setPoolName("pgms-hikari");
         return dataSource;
     }
