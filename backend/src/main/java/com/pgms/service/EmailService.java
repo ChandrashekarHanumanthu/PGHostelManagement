@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender mailSender;
 
     @Autowired
@@ -29,6 +29,11 @@ public class EmailService {
      */
     public boolean sendPasswordSetupEmail(String toEmail, String signupToken, String tenantName) {
         try {
+            if (mailSender == null) {
+                System.err.println("Email sender is not configured. Skipping email send to " + toEmail);
+                return false;
+            }
+
             String setupLink = frontendUrl + "/signup/" + signupToken;
             
             // Get hostel name
