@@ -15,7 +15,7 @@ public class DataSourceConfig {
             @Value("${DB_URL}") String rawDbUrl,
             @Value("${DB_USERNAME}") String username,
             @Value("${DB_PASSWORD}") String password,
-            @Value("${DB_MAX_POOL_SIZE:2}") int maxPoolSize,
+            @Value("${DB_MAX_POOL_SIZE:1}") int maxPoolSize,
             @Value("${DB_MIN_IDLE:0}") int minIdle,
             @Value("${DB_CONNECTION_TIMEOUT_MS:30000}") long connectionTimeoutMs,
             @Value("${DB_IDLE_TIMEOUT_MS:600000}") long idleTimeoutMs,
