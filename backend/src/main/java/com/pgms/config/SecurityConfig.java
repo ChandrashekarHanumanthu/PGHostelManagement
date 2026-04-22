@@ -47,6 +47,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/hostel-signup/**").permitAll()
                         // Public tenant invited-signup endpoints
                         .requestMatchers("/api/tenant-signup/**").permitAll()
+                        // Public health endpoint for uptime and platform checks
+                        .requestMatchers("/api/public/**").permitAll()
                         // Public file serving endpoints
                         .requestMatchers("/uploads/**").permitAll()
                         // Admin endpoints allow ADMIN and OWNER roles
